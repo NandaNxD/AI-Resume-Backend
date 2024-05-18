@@ -1,6 +1,7 @@
 const express = require('express')
 const app = express()
 
+const cors=require('cors')
 const fileUpload = require('express-fileupload');
 const fs = require('fs');
 const pdf = require('pdf-parse');
@@ -9,6 +10,7 @@ require('dotenv').config();
 const PORT = process.env.PORT;
 
 app.use(fileUpload());
+app.use(cors())
 
 
 const { GoogleGenerativeAI } = require("@google/generative-ai");
