@@ -1,34 +1,32 @@
 const express = require('express')
 const app = express()
 
-app.get('/', function (req, res) {
+const fileUpload = require('express-fileupload');
+const fs = require('fs');
+const pdf = require('pdf-parse');
 
-    const fs = require('fs');
-    const pdf = require('pdf-parse');
-    
-    let dataBuffer = fs.readFileSync('C:/Users/Asus/Desktop/RESUME.pdf');
-    
+require('dotenv').config();
+const PORT= process.env.PORT;
+
+app.use(fileUpload());
+
+
+app.get('/', function (req, res) {
+    res.send('Service Running');
+})
+
+
+app.post('/upload', function(req, res) {
+    console.log(req.files['pdf']); // the uploaded file object
+
+    const dataBuffer=req.files['pdf'];
+
     pdf(dataBuffer).then(function(data) {
-    
-        // number of pages
-        console.log(data.numpages);
-        // number of rendered pages
-        console.log(data.numrender);
-        // PDF info
-        console.log(data.info);
-        // PDF metadata
-        console.log(data.metadata); 
-        // PDF.js version
-        // check https://mozilla.github.io/pdf.js/getting_started/
-        console.log(data.version);
-        // PDF text
         
         res.send(data.text)
             
     });
 
+});
 
-  
-})
-
-app.listen(3000)
+app.listen(PORT)
