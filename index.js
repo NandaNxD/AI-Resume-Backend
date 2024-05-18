@@ -31,7 +31,7 @@ const generationConfig = {
 };
 
 async function getResultsFromGemini(resumeTextDump) {
-    const prompt = `Get Resume from this text, \"${resumeTextDump}\"`
+    const prompt = `Get Resume from this text,return response without quotes, \"${resumeTextDump}\"`
     const result = await model.generateContent(prompt);
     const response = await result.response;
     const text = response.text();
