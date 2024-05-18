@@ -31,14 +31,31 @@ const generationConfig = {
 };
 
 async function getResultsFromGemini(resumeTextDump) {
-    const prompt = `Get Resume from this text,return response without quotes, \"${resumeTextDump}\"`
+
+    const prompt=`
+        INPUT: 'Text from a resume',
+        INPUT TEXT:\"${resumeTextDump}\",
+        OUTPUT: 'Get resume out of the text input,send Response exactly like OUTPUT STRUCTURE',
+        OUTPUT STRUCTURE: {
+            resume:"",
+            keywords:[]
+        }, 
+        where resume in  OUTPUT STRUCTURE will be resume that you create fcrom text and
+        keywords will be IT and Technical skill keywords only,
+        Example Output: {
+            resume:'Nandan T S\n Frontend developer\n\nskills: python,javascript,angular....'
+            keywords:['python','javascript'...]
+        },ONLY HARD TECHNICAL SKILLS`
+
     const result = await model.generateContent(prompt);
     const response = await result.response;
     const text = response.text();
 
+    pattern = '\{[^{}]*\}'
+
     console.log(text);
 
-    return text;
+    return text.match(pattern).at(0);
 }
 
 
